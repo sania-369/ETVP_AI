@@ -1,4 +1,4 @@
-# 🌀 ETVE v12.3 — Единый файл для ИИ (Complete Prompt + Core Files)
+# 🌀 ETVP v12.3 — Единый файл для ИИ (Complete Prompt + Core Files)
 
 ## ⚠ РАСЧЁТЫ И ВЫЧИСЛЕНИЯ ПРОВОДЯТСЯ СТРОГО В ЖИВОЙ ДИНАМИКЕ ПОТОКА!
 
