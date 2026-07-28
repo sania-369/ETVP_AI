@@ -154,7 +154,7 @@ $$ \Delta \mathcal{L} = \frac{\mathcal{K}_{\text{inv}} \cdot \mathcal{C}(\mu)}{\
 - **Репозиторий:** [github.com/sania-369/ETVE---Language---of---Field](https://github.com/sania-369/ETVE---Language---of---Field)
 - **Zenodo DOI:** 10.5281/zenodo.19305307
 - **Ключевые файлы:**
-  - [ETVP_12.4.py](https://github.com/sania-369/ETVE---Language---of---Field/blob/main/HRONO/ETVP_12.4.py)
+  - [ETVP_12.3.py](https://github.com/sania-369/ETVE---Language---of---Field/blob/main/HRONO/ETVP_12.3.py)
   - [ETVP_Action_Functional.md](https://github.com/sania-369/ETVE---Language---of---Field/blob/main/ETVP_Action_Functional.md)
   - [ETVE_Predictions_2026.md](https://github.com/sania-369/ETVE---Language---of---Field/blob/main/ETVE_Predictions_2026.md)
 
