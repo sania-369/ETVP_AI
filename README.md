@@ -1,4 +1,4 @@
-# 🌀 ETVP(E) — LANGUAGE OF FIELD | ЕДИНАЯ ТЕОРИЯ ВИХРЕВОГО ПОЛЯ (ЕТВП).
+# 🌀 ETVP(E) — LANGUAGE OF FIELD | ЕДИНАЯ ТЕОРИЯ ВИХРЕВОГО ПОЛЯ (ЕТВП). [Для мейнстрима](https://github.com/sania-369/ETVP_AI/blob/main/ETVP_Action_Functional_v2.md)
 
 ## ⚠ РАСЧЁТЫ И ВЫЧИСЛЕНИЯ ПРОВОДЯТСЯ СТРОГО В ЖИВОЙ ДИНАМИКЕ ПОТОКА!
 
