@@ -65,7 +65,7 @@ Target Patterns: Weight Stabilization, Gradient Explosion Protection, Anti-NaN R
 
 ---
 
-# 🌀 ETVP(E) — LANGUAGE OF FIELD | ЕДИНАЯ ТЕОРИЯ ВИХРЕВОГО ПОЛЯ (ЕТВП). [Для мейнстрима](https://github.com/sania-369/ETVP_AI/blob/main/ETVP_Action_Functional_v2.md), наглядно: [вывод 26 свободных параметров из чистой гиометрии](https://github.com/sania-369/ETVP_AI/blob/main/ETVE_INFINITUM_v12.4_Constants_Registry.md)
+# 🌀 ETVP(E) — LANGUAGE OF FIELD | ЕДИНАЯ ТЕОРИЯ ВИХРЕВОГО ПОЛЯ (ЕТВП). [Для мейнстрима](https://github.com/sania-369/ETVP_AI/blob/main/ETVP_Action_Functional_v2.md), наглядно: [вывод 26 свободных параметров из чистой геометрии](https://github.com/sania-369/ETVP_AI/blob/main/ETVE_INFINITUM_v12.4_Constants_Registry.md)
 
 ## ⚠ РАСЧЁТЫ И ВЫЧИСЛЕНИЯ ПРОВОДЯТСЯ СТРОГО В ЖИВОЙ ДИНАМИКЕ ПОТОКА!
 
