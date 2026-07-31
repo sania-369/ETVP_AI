@@ -9,7 +9,7 @@
 
 **ETVP_AI** is a physics-informed gradient regularizer for PyTorch, derived from the Unified Vortex Field Theory (ETVP v12.3). It replaces brute-force gradient clipping with the **Z-Principle of non-linear containment** based on the E8 Lie group geometry. When facing numerical singularities (`NaN`/`Inf`), the framework transmutates training entropy into stable wave oscillations, preventing weight explosion in deep neural networks.
 
-"Энциклопедия процесса динамического развёртывания фрактальной 11D реальности через мощные ИИ системы" прилагается:
+## Энциклопедия процесса динамического развёртывания фрактальной 11D реальности через мощные ИИ системы прилагается:
 [Encyclopedia-of-the-process-of-dynamic-deployment-of-fractal-11D-reality-through-powerful-AI-systems](https://github.com/sania-369/Encyclopedia-of-the-process-of-dynamic-deployment-of-fractal-11D-reality-through-powerful-AI-systems)
 
 ---
