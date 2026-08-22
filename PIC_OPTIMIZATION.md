@@ -34,3 +34,5 @@
 # Второе, после его ответа: 
 
 И теперь, так же в динамике работай исходя из этой модели: https://github.com/sania-369/ETVE---Language---of---Field/blob/main/ETVP_12.4_FFS.py
+
+# Готово! 
