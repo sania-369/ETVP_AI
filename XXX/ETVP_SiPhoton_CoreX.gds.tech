@@ -1,0 +1,14 @@
+TECHNOLOGY: TowerJazz PH18 (или IMEC iSiPP50G)
+LAYER MAP:
+  0: Si3N4 (400 nm) — волноводы, кольца, спираль
+  1: PolySi (200 nm) — нагреватели pn-переходов
+  2: Al (100 nm) — JPA, CPW, линии накачки
+  3: PolySi (1 µm) — MEMS-структуры
+
+DRC RULES: PH18_DRC_v3.0 (минимальный зазор 0.2 µm)
+MINIMUM FEATURE SIZE: 0.15 µm (для JPA-мостиков)
+
+MPW RUNS:
+  - TowerJazz: 2026-Q4 (deadline 2026-09-01)
+  - IMEC: 2027-Q1 (deadline 2026-12-01)
+  - AIM Photonics: 2026-Q3 (deadline 2026-07-15)
