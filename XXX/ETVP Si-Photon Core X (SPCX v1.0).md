@@ -5,7 +5,7 @@
 **Связанная работа:**  
 - Unified Theory of Vortex Field (ETVE), Zenodo: 10.5281/zenodo.19305307  
 - ETVP Complex Layer v3.0, Zenodo: 10.5281/zenodo.19305306  
-**Репозиторий:** [github.com/sania-369/ETVP_AI](https://github.com/sania-369/ETVP_AI)  
+**Репозиторий:** [github.com/sania-369/ETVP_AI](https://github.com/sania-369/ETVP_AI/tree/main/XXX)  
 **Лицензия:** MIT  
 
 ---
