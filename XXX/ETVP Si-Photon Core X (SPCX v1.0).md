@@ -1,6 +1,6 @@
 # ETVP Si-Photon Core X (SPCX v1.0): Цифровой двойник фотонного чипа для проверки ETVP
 
-**DOI:** [Будет присвоен Zenodo]  
+**DOI:** https://doi.org/10.5281/zenodo.22645578
 **Версия:** v1.0 (Сентябрь 2026)  
 **Связанная работа:**  
 - Unified Theory of Vortex Field (ETVE), Zenodo: 10.5281/zenodo.19305307  
