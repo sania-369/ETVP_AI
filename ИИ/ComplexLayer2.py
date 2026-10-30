@@ -2,17 +2,19 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import math
-from typing import Optional, Tuple, Literal
+from typing import Tuple, Literal
 
 
 class ETVP_ComplexLayer(nn.Module):
     r"""
-    ETVP Complex Layer v3.1 — с фиксами блокеров.
+    ETVP Complex Layer v3.2 — рабочая версия.
 
     Изменения относительно v3.0:
-      - v3.1a: проекция входа при dim_in != dim_out (вместо падения в increment)
-      - v3.1b: theta_mu инициализирован -4.0 (mu ≈ 0.018 на старте, не 0.693)
-      - v3.1c: возврат когерентности C в intermediates
+      - v3.2a: assert dim_in == dim_out (смена размерности — снаружи через nn.Linear)
+      - v3.2b: theta_mu = -4.0 (mu ≈ 0.018 на старте)
+      - v3.2c: возврат когерентности C в intermediates
+      - v3.2d: Xavier поделён на sqrt(2) для комплексных весов
+      - v3.2e: защита от H<2 / W<2 в лапласиане
     """
 
     EPS: float = 1e-8
@@ -30,6 +32,12 @@ class ETVP_ComplexLayer(nn.Module):
                  lambda_z: float = 1.0):
         super().__init__()
 
+        if dim_in != dim_out:
+            raise ValueError(
+                f"ETVP_ComplexLayer требует dim_in == dim_out (получено {dim_in} и {dim_out}). "
+                f"Для смены размерности используйте nn.Linear перед слоем."
+            )
+
         self.dim_in = dim_in
         self.dim_out = dim_out
         self.R_max = R_max
@@ -41,7 +49,7 @@ class ETVP_ComplexLayer(nn.Module):
         self.mode = mode
         self.lambda_z = lambda_z
 
-        # --- Комплексные веса (Xavier, делим на sqrt(2) для комплексной дисперсии) ---
+        # --- Комплексные веса (Xavier, делим на sqrt(2)) ---
         bound = (2.0 / dim_in) ** 0.5 / (2.0 ** 0.5)
         self.W_re = nn.Parameter(torch.randn(dim_in, dim_out) * bound)
         self.W_im = nn.Parameter(torch.randn(dim_in, dim_out) * bound)
@@ -49,15 +57,7 @@ class ETVP_ComplexLayer(nn.Module):
         self.b_re = nn.Parameter(0.01 * torch.randn(dim_out))
         self.b_im = nn.Parameter(0.01 * torch.randn(dim_out))
 
-        # --- Проекция входа, если размерности не совпадают (фикс v3.1a) ---
-        if dim_in != dim_out:
-            self.proj_re = nn.Linear(dim_in, dim_out, bias=False)
-            self.proj_im = nn.Linear(dim_in, dim_out, bias=False)
-        else:
-            self.proj_re = None
-            self.proj_im = None
-
-        # --- Обучаемая вязкость (фикс v3.1b: -4.0 → mu ≈ 0.018) ---
+        # --- Обучаемая вязкость (mu ≈ 0.018 на старте) ---
         self.theta_mu = nn.Parameter(torch.tensor(-4.0))
 
     # ============================================================
@@ -110,7 +110,7 @@ class ETVP_ComplexLayer(nn.Module):
                       torch.einsum('bihw,io->bohw', x_im, self.W_re) +
                       self.b_im.view(1, -1, 1, 1))
         else:
-            raise ValueError(f"Unsupported tensor dims: {x_re.dim()}.")
+            raise ValueError(f"Unsupported tensor dims: {x_re.dim()}. Expected 2D or 4D.")
         return out_re, out_im
 
     def cardioid_activation(self, re: torch.Tensor, im: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
@@ -119,26 +119,15 @@ class ETVP_ComplexLayer(nn.Module):
         return scale * re, scale * im
 
     # ============================================================
-    # 4. ПРОЕКЦИЯ ВХОДА (если dim_in != dim_out)
-    # ============================================================
-    def project_input(self, x_re, x_im):
-        if self.proj_re is None:
-            return x_re, x_im
-        return self.proj_re(x_re), self.proj_im(x_im)
-
-    # ============================================================
-    # 5. ОПЕРАТОР ЭВОЛЮЦИИ
+    # 4. ОПЕРАТОР ЭВОЛЮЦИИ
     # ============================================================
     def forward(self,
                 x_re: torch.Tensor,
                 x_im: torch.Tensor,
                 dt: float = 0.1,
                 return_intermediate: bool = False):
-        # Проекция входа к dim_out (фикс v3.1a)
-        x_re_p, x_im_p = self.project_input(x_re, x_im)
-
         # --- Шаг 1: k1 ---
-        f_re, f_im = self.complex_mul(x_re_p, x_im_p)
+        f_re, f_im = self.complex_mul(x_re, x_im)
         if self.use_cardioid:
             f_re, f_im = self.cardioid_activation(f_re, f_im)
         else:
@@ -148,7 +137,7 @@ class ETVP_ComplexLayer(nn.Module):
         lap_re = self.laplacian(f_re)
         lap_im = self.laplacian(f_im)
 
-        # Когерентность (фикс v3.1c)
+        # Когерентность (диагностика)
         f_abs = torch.sqrt(f_re**2 + f_im**2) + self.EPS
         C = torch.tanh(f_abs.mean()).item()
 
@@ -161,9 +150,9 @@ class ETVP_ComplexLayer(nn.Module):
         if self.mode == 'increment':
             k1_re = f_re - mu * lap_re
             k1_im = f_im - mu * lap_im
-            x_pred_re = x_re_p + dt * k1_re
-            x_pred_im = x_im_p + dt * k1_im
-        else:
+            x_pred_re = x_re + dt * k1_re
+            x_pred_im = x_im + dt * k1_im
+        else:  # generate
             k1_re = f_re - mu * lap_re
             k1_im = f_im - mu * lap_im
             x_pred_re = f_re - dt * mu * lap_re
@@ -188,8 +177,8 @@ class ETVP_ComplexLayer(nn.Module):
 
         # --- Шаг 3: Heun ---
         if self.mode == 'increment':
-            z_re_next = x_re_p + dt * (k1_re + k2_re) / 2 + noise_re
-            z_im_next = x_im_p + dt * (k1_im + k2_im) / 2 + noise_im
+            z_re_next = x_re + dt * (k1_re + k2_re) / 2 + noise_re
+            z_im_next = x_im + dt * (k1_im + k2_im) / 2 + noise_im
         else:
             z_re_next = (f_re + f_pred_re) / 2 - dt * mu * (lap_re + lap_pred_re) / 2
             z_im_next = (f_im + f_pred_im) / 2 - dt * mu * (lap_im + lap_pred_im) / 2
